@@ -1,0 +1,56 @@
+Треба BRIN індекси для:
+
+SELECT *
+FROM booking
+WHERE date >= '2024-01-01' AND date <= '2024-06-01';
+
+CREATE INDEX brin_booking_date_idx
+ON booking
+USING BRIN (date);
+
+
+SELECT COUNT(*) AS total_clients
+FROM client;
+
+CREATE INDEX brin_client_client_id_idx
+ON client
+USING BRIN (client_id);
+
+
+SELECT booking_status, COUNT(*) AS status_count
+FROM booking
+GROUP BY booking_status;
+
+CREATE INDEX brin_booking_status_idx
+ON booking
+USING BRIN (booking_status);
+
+
+SELECT *
+FROM booking
+ORDER BY client_id DESC;
+
+CREATE INDEX brin_booking_client_id_idx
+ON booking
+USING BRIN (client_id);
+
+
+SELECT room_id, COUNT(*) AS total_bookings
+FROM booking
+WHERE date >= '2024-01-01'
+GROUP BY room_id
+ORDER BY total_bookings DESC;
+
+CREATE INDEX brin_booking_date_roomid_idx
+ON booking
+USING BRIN (date, room_id);
+
+
+SELECT booking.booking_id, booking.date, client.name, client.phone_number
+FROM booking
+INNER JOIN client ON booking.client_id = client.client_id;
+
+CREATE INDEX brin_booking_clientid_idx
+ON booking
+USING BRIN (client_id);
+
